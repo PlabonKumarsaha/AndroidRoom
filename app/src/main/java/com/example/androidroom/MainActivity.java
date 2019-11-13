@@ -4,6 +4,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -33,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
         //what class model we need.
         noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
 
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+        final NoteAdapter noteAdapter = new NoteAdapter();
+        recyclerView.setAdapter(noteAdapter);
+
         //observe is a live data model.
         //observer will only update activity when it is in the fork ground.it will automaticaly destroy the meory
         //so it will avoid memeory leak
@@ -43,8 +52,12 @@ public class MainActivity extends AppCompatActivity {
                 //method is called each time data is changed!
                 //if we rotate devce this will not hold the activity and change the data
                 Toast.makeText(MainActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+                noteAdapter.setNotes(notes);
             }
         });
+
+
+
 
     }
 }
